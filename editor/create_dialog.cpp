@@ -56,6 +56,8 @@ void CreateDialog::popup_create(bool p_dont_clear, bool p_replace_mode, const St
 	search_box->grab_focus();
 	_update_search();
 
+	search_box->set_text("");
+
 	if (p_replace_mode) {
 		set_title(vformat(TTR("Change Type of \"%s\""), p_current_name));
 		set_ok_button_text(TTR("Change"));
@@ -487,7 +489,7 @@ void CreateDialog::_notification(int p_what) {
 		case NOTIFICATION_VISIBILITY_CHANGED: {
 			if (is_visible()) {
 				callable_mp((Control *)search_box, &Control::grab_focus).call_deferred(); // Still not visible.
-				search_box->select_all();
+				search_box->set_text("");
 			} else {
 				EditorSettings::get_singleton()->set_project_metadata("dialog_bounds", "create_new_node", Rect2(get_position(), get_size()));
 			}
