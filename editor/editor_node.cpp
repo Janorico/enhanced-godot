@@ -3027,6 +3027,49 @@ void EditorNode::_menu_option_confirm(int p_option, bool p_confirmed) {
 			}
 		} break;
 
+		case EditorSceneTabs::SCENE_SHOW_IN_EXPLORER: {
+			String path = editor_data.get_scene_path(editor_data.get_edited_scene());
+			if (!path.is_empty()) {
+				String dir = ProjectSettings::get_singleton()->globalize_path(path);
+				OS::get_singleton()->shell_show_in_file_manager(dir, true);
+			}
+		} break;
+
+		case EditorSceneTabs::SCENE_OPEN_EXTERNAL: {
+			String path = editor_data.get_scene_path(editor_data.get_edited_scene());
+			if (!path.is_empty()) {
+				path = ProjectSettings::get_singleton()->globalize_path(path);
+				const String extension = path.get_extension();
+
+				const String resource_type = ResourceLoader::get_resource_type(path);
+				String external_program;
+
+				if (ClassDB::is_parent_class(resource_type, "Script") || extension == "tres" || extension == "tscn") {
+					external_program = EDITOR_GET("text_editor/external/exec_path");
+				} else if (extension == "res" || extension == "scn") {
+					// Binary resources have no meaningful editor outside Godot, so just fallback to something default.
+				} else if (resource_type == "CompressedTexture2D" || resource_type == "Image") {
+					if (extension == "svg" || extension == "svgz") {
+						external_program = EDITOR_GET("filesystem/external_programs/vector_image_editor");
+					} else {
+						external_program = EDITOR_GET("filesystem/external_programs/raster_image_editor");
+					}
+				} else if (ClassDB::is_parent_class(resource_type, "AudioStream")) {
+					external_program = EDITOR_GET("filesystem/external_programs/audio_editor");
+				} else if (resource_type == "PackedScene") {
+					external_program = EDITOR_GET("filesystem/external_programs/3d_model_editor");
+				}
+
+				if (external_program.is_empty()) {
+					OS::get_singleton()->shell_open(path);
+				} else {
+					List<String> args;
+					args.push_back(path);
+					OS::get_singleton()->create_process(external_program, args);
+				}
+			}
+		} break;
+
 		case PROJECT_OPEN_SETTINGS: {
 			project_settings_editor->popup_project_settings();
 		} break;
