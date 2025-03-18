@@ -308,6 +308,7 @@ void EditorHelpSearch::popup_dialog(const String &p_term) {
 	}
 	search_box->grab_focus();
 	_update_results();
+	search_box->set_text("");
 }
 
 EditorHelpSearch::EditorHelpSearch() {
