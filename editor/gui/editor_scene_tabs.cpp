@@ -200,9 +200,9 @@ void EditorSceneTabs::_update_context_menu() {
 		scene_tabs_context_menu->add_separator();
 		scene_tabs_context_menu->add_item(TTR("Show in FileSystem"), SCENE_SHOW_IN_FILESYSTEM);
 		DISABLE_LAST_OPTION_IF(!ResourceLoader::exists(EditorNode::get_editor_data().get_scene_path(tab_id)));
-		scene_tabs_context_menu->add_item(TTR("Show in Explorer"), SCENE_SHOW_IN_EXPLORER);
+		scene_tabs_context_menu->add_item(TTR("Show in File Manager"), SCENE_SHOW_IN_EXPLORER);
 		DISABLE_LAST_OPTION_IF(!ResourceLoader::exists(EditorNode::get_editor_data().get_scene_path(tab_id)));
-		scene_tabs_context_menu->add_item(TTR("Open in External"), SCENE_OPEN_EXTERNAL);
+		scene_tabs_context_menu->add_item(TTR("Open in External Program"), SCENE_OPEN_EXTERNAL);
 		DISABLE_LAST_OPTION_IF(!ResourceLoader::exists(EditorNode::get_editor_data().get_scene_path(tab_id)));
 		scene_tabs_context_menu->add_item(TTR("Play This Scene"), SCENE_RUN);
 		DISABLE_LAST_OPTION_IF(no_root_node);
